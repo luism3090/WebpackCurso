@@ -1,0 +1,294 @@
+Lo primero que tenemos que hacer es instalar NodeJs y abrir la consola de NodeJs
+
+Webpack se puede instalar de 2 formas LOCAL Y GLOBAL
+
+
+
+----------------------- instalacion local : -----------------------
+
+para poder instalar webpack de forma local tenemos que tener un archivo de configuracion por lo regular se le 
+llama package.js el cual nos va a decir cuales son nuestras dependencias tanto de produccion como de desarrollo asi como la version especifica para ello teclearemos el siguiente comando
+
+npm init -y
+
+luego de crear nuestro archivo package.js se debe instalar webpack de forma local haciendo lo siguiente :
+
+
+// instalar dependencia de desarrollo de webpack de una version en especifico 
+
+
+npm install --save-dev webpack@2.2.1  	
+npm install -D webpack@2.2.1          
+npm install webpack@2.2.1 --save-dev
+
+
+ //  instalar dependencia de desarrollo de webpack de la version mas actual
+
+npm i -D webpack   
+npm i webpack -D         
+
+// tambien podemos acceder a la version que tenemos instalada de webpack  
+//  ruta de instalacion de webpack (node_modules\.bin\webpack)
+
+node_modules\.bin\webpack -v 
+
+
+Tambien podemos desinstalar una dependencia con el comando  "uninstall"
+
+npm uninstall webpack -D 
+
+
+---------------  crear un empaquetado con webpack instalado de forma local -------------------
+
+para crear un empaquetado de nuestros archivos debemos seguir lo siguiente
+
+*  que archivo(s) se van a empaquetar, (entrada) y el archivo final que sera el archivo empaquetado final (salida) .
+* tambien debemos colocar la ruta a donde esta instalado webpack que es (node_modules\.bin\webpack) 
+
+
+sintaxis:  node_modules\.bin\webpack input.js dist\output.js   
+
+Ejemplo : 
+
+node_modules\.bin\webpack app.js dist\bundle.js
+
+o
+
+node_modules\.bin\webpack app.js bundle.js
+
+
+// podemos correr la aplicacion desde la consola 
+
+node app.js
+
+
+
+---------------- Agregando jquery como dependencia de webpack a nuestro proyecto ------------
+
+Para agregar jquery a nuestro proyecto debemos hacer lo siguiente
+
+npm install jquery --save 
+
+Nota: 
+
+podemos agregar cuantas librerias queramos no solo jquery
+
+
+
+----------------- escuchar cambios al guardar un archivo --watch -------------
+
+
+para escuchar los cambios de una mejor manera utilizamos el comando --watch o -w
+
+node_modules\.bin\webpack app.js dist\bundle.js --watch
+
+
+
+
+------------------- instalando recursos en webpack con loader ---------------------------
+
+instalando un loader para correr css
+
+npm install style-loader css-loader -D 
+
+
+
+
+
+------------------------ crear empaquetado con npm run ------------------------------------------
+
+
+vamos a nuestro package.json y dentro del objeto scripts escribimos nuestro comando de empaquetado
+
+"dev": "node_modules/.bin/webpack index.js bundle.js"
+
+
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node_modules/.bin/webpack index.js bundle.js"
+  },
+
+
+
+----------------------- creando nuestro archivo de configuracion de webpack  -------------------------
+
+Nota:  para este proceso quiza podriamos requerir instalar webpack de forma global y
+para ello debemos hacer lo siguiente 
+
+npm install  -global webpack@2.2.1     // para instalar una version en especifico
+npm install  -global webpack           // para instalar la version mas actual
+
+
+// Desintalar webpack de forma global 
+
+npm uninstall  -global webpack@2.2.1     // para desintalar una version en especifico
+npm uninstall  -global webpack           // para desintalar la version mas actual
+
+
+
+
+Este archivo de configurarsion se debe encontrar en la raiz de nuestro proyecto ,el cual se debe llamar
+
+webpack.config.js
+
+-----
+
+const CONFIG  = 
+				{
+					entry:'./app.js',
+					output: {
+						path: __dirname,
+						filename: 'dist/bundle.js'
+					}
+				}
+
+module.exports = CONFIG;
+
+-----
+
+"SI" tenemos instalado webpack de forma global en nuestro proyecto debemos usar lo siguiente :
+
+y escribir en la terminal simplemente 
+
+webpack 
+
+y si queremos estar escuchando todos los cambios 
+
+webpack --watch
+
+-----
+
+Si "NO" tenemos instalado webpack de forma global, pero si lo tenemos instalado de forma local en nuestro proyecto debemos usar algo parecido a lo siguiente:
+
+
+node_modules\.bin\webpack
+
+//  o para escuchar los cambios en todo momento
+
+node_modules\.bin\webpack --watch
+
+
+
+---------------- instalando el servidor de desarrollo de webpack ----------------------------
+
+
+lo primero que debemos hacer es  instalar el servidor de webpack , para ello escribiremos en la terminal los siguientes comandos:
+
+
+npm install webpack-dev-server -g
+
+despues de instalarlo debemos configurar en nuestro package.json la configuracion siguiente
+
+en la parte de scripts modificar nuestra entrada y salida segun nuestro proyecto
+
+"scripts": {
+    "dev": "webpack-dev-server --entry input.js --output-filename output.js"
+  },
+
+
+depues escribir en nuestra consola lo siguiente 
+
+npm run dev 
+
+y ya estará funcionando nuestro servidor de desarrollo escuchando cambios en tiempo real 
+
+
+
+--------------- usando babel para ejecutar el servidor de webpack ----------------------
+
+
+para usar babel dentro de nuestro proyecto debemos ejecutar los siguientes comandos 
+
+npm install babel-core babel-loader babel-preset-es2015 --save-dev
+npm install babel-core babel-loader babel-preset-es2015 --save
+
+
+Nota : 
+
+babel --> una de sus funciones es transformar de javascript ecmascript 2016 a ecmascript 2015 
+para que sea compatible con todos los navegadores 
+
+
+una vez instalado babel debemos configurar nuestro archvios webpack.config.js para que funcione 
+babel y tambien para que quede mejor configurada la forma en que llamamos a los css 
+para ello debemos colocar el siguiente codigo
+
+
+module:{
+		loaders:[
+			{
+				test:/\.css$/, 
+				loader: 'style-loader!css-loader'
+			},
+			{
+				test:/\.js$/, 
+				loader: 'babel-loader',
+				exclude: /node_modules/,
+				query: { 
+					presets: ['es2015']
+				}
+			},
+		]
+	}
+
+
+y por ultimo solo debemos correr el comando 
+
+npm run dev
+
+
+
+
+
+
+
+
+
+
+
+----------------------- instalacion global : -----------------------
+
+
+Para instalar webpack de forma global haremos uso del comando npm 
+
+npm install  -global webpack@2.2.1     // para instalar una version en especifico
+npm install  -global webpack     // para instalar la version mas actual
+
+o
+
+npm i -g webpack@2.2.1 		// para instalar una version en especifico
+npm i -g webpack            // para instalar la version mas actual
+
+
+Tenga en cuenta que esto no es una práctica recomendada. La instalación global bloquea una versión específica de webpack y puede fallar en proyectos que utilizan una versión diferente.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
