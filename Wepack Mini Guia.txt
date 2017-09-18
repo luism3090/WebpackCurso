@@ -1,49 +1,168 @@
-Lo primero que tenemos que hacer es instalar NodeJs y abrir la consola de NodeJs
+Lo primero que tenemos que hacer es instalar NodeJs, descargamos e instalamos node js
 
-Webpack se puede instalar de 2 formas LOCAL Y GLOBAL
+abrimos la consola de NodeJs
 
 
 
------------------------ instalacion local : -----------------------
+y tecleamos para verificar que version de Node js tenemos:
 
-para poder instalar webpack de forma local tenemos que tener un archivo de configuracion por lo regular se le 
-llama package.js el cual nos va a decir cuales son nuestras dependencias tanto de produccion como de desarrollo asi como la version especifica para ello teclearemos el siguiente comando
+node --version
+
+
+
+---------------
+
+
+ahora crearemos el famoso archivo de configuracion de nuestro proyecto llamado package.json el cual nos va a mostrar cuales son nuestras dependencias tanto de produccion como de desarrollo asi como la version especifica, para ello teclearemos el siguiente comando
 
 npm init -y
+npm init -yes
 
-luego de crear nuestro archivo package.js se debe instalar webpack de forma local haciendo lo siguiente :
-
-
-// instalar dependencia de desarrollo de webpack de una version en especifico 
+y con esto se nos habrá creado automaticamente el archivo package.js
 
 
-npm install --save-dev webpack@2.2.1  	
-npm install -D webpack@2.2.1          
-npm install webpack@2.2.1 --save-dev
+---- NOTA IMPORTANTE:  ------
+
+""" 
+
+Antes de continuar debemos saber lo siguiente :
+
+Node js nos permite usar una herramienta llamada "npm" ("node package module") la cual nos permite instalar modulos nuevos osea ("librerias") asi que para la mayoria de las operaciones deberemos instalar modulos adicionales, del mismo modo que para instalar webpack deberemos usar npm
+
+"""
+
+luego de crear nuestro archivo package.json debemos tener encuenta los detalles siguientes: 
+
+* al usar npm vamos a instalar modulos o librerias las cuales nos van ayudar a trabajar con nuestros proyectos, la instalacion de estos modulos o librerias debe ser configurada en nuestro archivo package.json 
+pero para ello debemos saber 2 cosas sobre la instalacion de estos modulos 
+
+se dice que cuando instalamos un modulo usando npm estamos haciendo referencia a dependencias las cuales son principalmente dependecias (normales) y dependencias de desarrollo
 
 
- //  instalar dependencia de desarrollo de webpack de la version mas actual
+----- Dependencias (normales) ---------
 
-npm i -D webpack   
-npm i webpack -D         
+Son recursos que van a formar parte de los archivos descargables. Es decir que, cuando alguien instale el módulo, va a descargar también todas esas dependencias.
 
-// tambien podemos acceder a la version que tenemos instalada de webpack  
-//  ruta de instalacion de webpack (node_modules\.bin\webpack)
 
-node_modules\.bin\webpack -v 
+
+un modulo instalado usando e indicador "--save" sera guardado dentro de la lista del archivo package.json sobre el objeto "dependencias"
+
+
+
+------ Dependencias de desarrollo -------
+
+
+Son recursos que se van a usar solo para desarrollar el módulo.
+Es decir que, cuando alguien lo instale, no va a necesitar descargar todas estas dependencias.
+
+Éstas pueden ser herramientas de tests, de documentación, task runners, etc.
+
+
+
+Un módulo instalado con el indicador "--save-dev" se guarda en la lista del archivo package.json. sobre el objeto "devDependencies"
+
+
+
+-------- Otra Nota mas :  ------------
+
+
+jQuery, LoDash, Vue y Axios son generalmente dependencias. Pero, como de costumbre, depende de las herramientas que está utilizando. Por ejemplo, con Webpack, tu estas empacando todo dentro de bundles para usarse. Así que, en realidad, todo lo que va a ser empaquetado es un devDependency
+
+En resumen, un devDependency es todo lo que necesitará para hacer que la página trabaje en producción
+
+
+---------------- instalando dependencias de webpack de forma global y local ----------------
+
+
+Vamos a instalar webpack de forma local y de forma global para tener mayor comodidad a la hora de trabajar
+
+
+Nota : 
+
+para instalar webpack de forma global solo debemos anteponerle el prefijo 
+( "-g" o "-global" ) a lo ultimo de la sentencia
+
+
+----- instalando dependencias de desarrollo "devDependencies" de webpack -----
+
+(para ello usaremos los prefijos "--save-dev"  o "-D" )
+
+
+npm install webpack -g
+npm install --save-dev webpack 
+
+npm install webpack -g 
+npm install -D webpack         
+
+npm install webpack -g
+npm install webpack --save-dev  
+
+
+-- de una version en especifico -- 
+
+npm install webpack@2.2.1 -g
+npm install --save-dev webpack@2.2.1 
+
+npm install webpack@2.2.1 -g
+npm install -D webpack@2.2.1   
+
+npm install webpack@2.2.1 -g
+npm install webpack@2.2.1 --save-dev 
+
+
+----- instalando dependencias (normales) "Dependencies" de webpack -----
+
+ 
+npm install webpack -g
+npm install --save webpack 
+
+npm install webpack -g
+npm install webpack --save  
+
+
+-- de una version en especifico -- 
+
+npm install webpack@2.2.1 -g
+npm install --save webpack@2.2.1 
+
+npm install webpack@2.2.1 -g
+npm install webpack@2.2.1 --save 
+   
+
+
+---------
+
+
+tambien podemos acceder a la version que tenemos instalada de webpack
+
+si esta instalado solo de forma local, se debe usar la ruta de instalacion de webpack  (node_modules\.bin\webpack) 
+
+  	node_modules\.bin\webpack -v 
+
+
+
+si esta instalado de forma global solo basta con usar 
+
+	webpack -v 
+
 
 
 Tambien podemos desinstalar una dependencia con el comando  "uninstall"
 
-npm uninstall webpack -D 
+npm uninstall webpack -g
+
+npm uninstall --save-dev webpack
+
+npm uninstall --save webpack
 
 
 ---------------  crear un empaquetado con webpack instalado de forma local -------------------
 
 para crear un empaquetado de nuestros archivos debemos seguir lo siguiente
 
-*  que archivo(s) se van a empaquetar, (entrada) y el archivo final que sera el archivo empaquetado final (salida) .
-* tambien debemos colocar la ruta a donde esta instalado webpack que es (node_modules\.bin\webpack) 
+*  que archivo(s) se van a empaquetar, (entrada) y el archivo final que sera el archivo empaquetado (salida) .
+
+* Si tenemos instalado webpack de forma local debemos colocar la ruta a donde esta instalado webpack que es (node_modules\.bin\webpack) 
 
 
 sintaxis:  node_modules\.bin\webpack input.js dist\output.js   
@@ -57,9 +176,21 @@ o
 node_modules\.bin\webpack app.js bundle.js
 
 
-// podemos correr la aplicacion desde la consola 
+* Si tenemos instalado webpack de forma global solo bastara con colocar la palabra 
+webpack 
 
-node app.js
+
+Sintaxis: webpack input.js dist\output.js   
+
+
+Ejemplo : 
+
+webpack app.js dist\bundle.js
+
+o
+
+webpack app.js bundle.js
+
 
 
 
