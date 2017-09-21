@@ -156,11 +156,23 @@ npm uninstall --save-dev webpack
 npm uninstall --save webpack
 
 
----------------  crear un empaquetado con webpack instalado de forma local -------------------
+----------------------------------- ¿ QUE ES WEBPACK ? ----------------------------------
 
-para crear un empaquetado de nuestros archivos debemos seguir lo siguiente
 
-*  que archivo(s) se van a empaquetar, (entrada) y el archivo final que sera el archivo empaquetado (salida) .
+webpack es una herramienta de empaquetado de archivos para aplicaciones web que permite generar un archivo unico apartir de un conjunto establecido de assets (archivos que incluimos en nuestro html como scripts,css,librerias etc)
+
+Entre los recursos que es capaz de gestionar webpack, podemos encontrar formatos soportados por defecto como HTML, JavaScript, CSS, así como otros formatos que necesitan ser transformados como SASS, CoffeeScript o Jade.
+
+El problema suele ser que, a medida que las dependencias crecen y el desarrollo se complica, aumenta el número de assets a ser incluidos en el HTML y con ello el número de peticiones que el navegador debe realizar al servidor para cargar la página, haciendo que el rendimiento se vea perjudicado ostensiblemente.
+
+Con webpack definiremos un único pipeline de procesamiento de recursos, obteniendo un único fichero empaquetado y minificado con todos los recursos necesarios para nuestro desarrollo.
+
+
+---------------  crear un empaquetado con webpack -------------------
+
+Para crear un empaquetado de nuestros archivos debemos seguir lo siguiente
+
+Que archivo(s) se van a empaquetar, (entrada) y el archivo final que sera el archivo empaquetado (salida) .
 
 * Si tenemos instalado webpack de forma local debemos colocar la ruta a donde esta instalado webpack que es (node_modules\.bin\webpack) 
 
@@ -211,18 +223,30 @@ podemos agregar cuantas librerias queramos no solo jquery
 
 para escuchar los cambios de una mejor manera utilizamos el comando --watch o -w
 
+
+* Si tenemos instalado webpack de forma local
+
+
 node_modules\.bin\webpack app.js dist\bundle.js --watch
 
+
+* Si tenemos instalado webpack de forma global
+
+
+webpack app.js bundle.js --watch
 
 
 
 ------------------- instalando recursos en webpack con loader ---------------------------
 
+Los loaders permiten preprocesar archivos como con require()  o "cargarlos". Los loaders son como "tareas" en otras herramientas de compilación y proporcionan una manera poderosa de manejar los pasos de construcción del frontend. Los loaders pueden transformar archivos de un lenguaje diferente como, CoffeeScript a JavaScript o imágenes en línea como URL de datos. Los loaders incluso le permiten requerir archivos css con require() directamente en su JavaScript!
+
+
 instalando un loader para correr css
 
 npm install style-loader css-loader -D 
 
-
+npm install style-loader css-loader --save-dev
 
 
 
@@ -243,37 +267,31 @@ vamos a nuestro package.json y dentro del objeto scripts escribimos nuestro coma
 
 ----------------------- creando nuestro archivo de configuracion de webpack  -------------------------
 
-Nota:  para este proceso quiza podriamos requerir instalar webpack de forma global y
-para ello debemos hacer lo siguiente 
 
-npm install  -global webpack@2.2.1     // para instalar una version en especifico
-npm install  -global webpack           // para instalar la version mas actual
+ahora crearemos el archivo de configuracion de webpack el famoso 
 
+webpack.config.js
 
-// Desintalar webpack de forma global 
-
-npm uninstall  -global webpack@2.2.1     // para desintalar una version en especifico
-npm uninstall  -global webpack           // para desintalar la version mas actual
+Este archivo nos va a permitir tener un mayor control a la hora de ejecutar nuestro comando webpack app.js bundle.js --watch
 
 
+ya que parte de ese codigo lo configuraremos en el archivo webpack.config.js y tambien dentro del archivo package.json
 
 
-Este archivo de configurarsion se debe encontrar en la raiz de nuestro proyecto ,el cual se debe llamar
+Este archivo de configuracion se debe encontrar en la raiz de nuestro proyecto ,el cual se debe llamar
 
 webpack.config.js
 
 -----
 
-const CONFIG  = 
-				{
-					entry:'./app.js',
-					output: {
-						path: __dirname,
-						filename: 'dist/bundle.js'
-					}
-				}
-
-module.exports = CONFIG;
+module.exports = {
+	entry: './app.js',
+	output:
+	{
+		path:__dirname,
+		filename: 'bundle.js'
+	}
+}
 
 -----
 
@@ -328,16 +346,14 @@ y ya estará funcionando nuestro servidor de desarrollo escuchando cambios en ti
 --------------- usando babel para ejecutar el servidor de webpack ----------------------
 
 
+babel una de sus funciones es transformar de javascript ecmascript 2016 a ecmascript 2015 
+para que sea compatible con todos los navegadores 
+
 para usar babel dentro de nuestro proyecto debemos ejecutar los siguientes comandos 
 
 npm install babel-core babel-loader babel-preset-es2015 --save-dev
 npm install babel-core babel-loader babel-preset-es2015 --save
 
-
-Nota : 
-
-babel --> una de sus funciones es transformar de javascript ecmascript 2016 a ecmascript 2015 
-para que sea compatible con todos los navegadores 
 
 
 una vez instalado babel debemos configurar nuestro archvios webpack.config.js para que funcione 
@@ -363,6 +379,15 @@ module:{
 	}
 
 
+ahora en nuestro archivo app.js para llamar a un css ya no es necesario colocar
+
+require("!style-loader!css-loader!../css/style.css");
+
+simplemente con colocar lo siguiente de abajo basta, ya que eso quedó configurado en el webpack.config.js
+
+require("../css/style.css");
+
+
 y por ultimo solo debemos correr el comando 
 
 npm run dev
@@ -370,28 +395,24 @@ npm run dev
 
 
 
+------------------- usando Emacript 2006 y a la vez transformando codigo con Babel -------------------
+
+
+podemos importar archivos usando Emascript 6 de la siguiente manera
 
 
 
+-- importando un archivo js
+
+import personas from './personas';
 
 
 
+-- importando una libreria como jquery
 
------------------------ instalacion global : -----------------------
-
-
-Para instalar webpack de forma global haremos uso del comando npm 
-
-npm install  -global webpack@2.2.1     // para instalar una version en especifico
-npm install  -global webpack     // para instalar la version mas actual
-
-o
-
-npm i -g webpack@2.2.1 		// para instalar una version en especifico
-npm i -g webpack            // para instalar la version mas actual
+import $ from 'jquery';
 
 
-Tenga en cuenta que esto no es una práctica recomendada. La instalación global bloquea una versión específica de webpack y puede fallar en proyectos que utilizan una versión diferente.
 
 
 
